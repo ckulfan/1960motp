@@ -84,7 +84,7 @@
 		
 	 var map = $('#map').usmap({
 		  click: function(event, data) {
-		  	console.log(data.name, state_data[data.name].points);
+		  	//console.log(data.name, state_data[data.name].points);
 		  	
 	  		if(state_data[data.name].lead == 'red') {
 				$('#' + data.name).css('fill', 'blue');
