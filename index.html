@@ -3,23 +3,133 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
     <title>1960: The Making of the President</title>
   
-  <script src="js/jquery.js"></script>
+  <script src="js/jquery-3.6.0.js"></script>
   <script src="js/raphael.js"></script>
   <script src="js/jquery.usmap.js"></script>
   
   <script language="javascript">
+  	
+  	var state_data = {
+	    WA: {fill: 'red', points: '9'},
+	    OR: {fill: 'red', points: '6'},
+	    CA: {fill: 'red', points: '32'},
+	    NV: {fill: 'blue', points: '3'},
+	    AK: {fill: 'red', points: '3'},
+	    ID: {fill: 'red', points: '4'},
+	    UT: {fill: 'red', points: '4'},
+	    AZ: {fill: 'red', points: '4'},
+	    HI: {fill: 'red', points: '3'},	    
+	    MT: {fill: 'red', points: '4'},
+	    WY: {fill: 'red', points: '3'},
+	    CO: {fill: 'red', points: '6'},
+	    NM: {fill: 'blue', points: '4'},
+	    ND: {fill: 'red', points: '4'},
+	    SD: {fill: 'red', points: '4'},
+	    NE: {fill: 'red', points: '6'},
+	    KS: {fill: 'red', points: '8'},
+	    OK: {fill: 'red', points: '8'},
+ 	    TX: {fill: 'blue', points: '24'},
+	    AR: {fill: 'blue', points: '8'},
+	    LA: {fill: 'blue', points: '10'},
+	    MS: {fill: 'blue', points: '8'},
+	    TN: {fill: 'red', points: '11'},
+	    AL: {fill: 'blue', points: '11'},
+	    GA: {fill: 'blue', points: '12'},
+	    VA: {fill: 'red', points: '12'},
+	    NC: {fill: 'blue', points: '14'},
+	    SC: {fill: 'blue', points: '8'},
+	    FL: {fill: 'red', points: '10'},
+	    MN: {fill: 'blue', points: '11'},
+	    IA: {fill: 'red', points: '10'},
+	    MO: {fill: 'blue', points: '13'},
+	    WI: {fill: 'red', points: '12'},
+	    IL: {fill: 'blue', points: '27'},
+	    MI: {fill: 'blue', points: '20'},
+	    IN: {fill: 'red', points: '13'},
+	    KY: {fill: 'red', points: '10'},
+	    OH: {fill: 'red', points: '25'},
+	    WV: {fill: 'blue', points: '8'},
+	    PA: {fill: 'blue', points: '32'},
+	    MD: {fill: 'blue', points: '9'},
+	    NY: {fill: 'blue', points: '45'},
+	    NJ: {fill: 'blue', points: '16'},
+	    DE: {fill: 'blue', points: '3'},
+	    VT: {fill: 'red', points: '3'},
+	    MA: {fill: 'blue', points: '16'},
+	    CT: {fill: 'blue', points: '8'},
+	    ME: {fill: 'red', points: '5'},
+	    NH: {fill: 'red', points: '4'},
+	    RI: {fill: 'blue', points: '4'},
+	    DC: {fill: 'blue', points: '0'}
+	  };
+	  
+    let kennedyCount = 0;
+    let nixonCount = 0;
+    
+	function initialize() {
+		kennedyCount = 0;
+		nixonCount = 0;
+		
+		// initialize the current leader based on color
+		for (const st in state_data) {
+			state_data[st].lead = state_data[st].fill;
+			if (state_data[st].fill == 'red') {
+				nixonCount += parseInt(state_data[st].points);
+			} else {
+				kennedyCount += parseInt(state_data[st].points);
+			}
+			//console.log(nixonCount);
+			//console.log(kennedyCount);
+		}
+		
+	 var map = $('#map').usmap({
+		  click: function(event, data) {
+		  	console.log(data.name, state_data[data.name].points);
+		  	
+	  		if(state_data[data.name].lead == 'red') {
+				$('#' + data.name).css('fill', 'blue');
+				state_data[data.name].lead ='blue';
+				nixonCount -= parseInt(state_data[data.name].points);
+				kennedyCount += parseInt(state_data[data.name].points);
+			} else {			    
+				$('#' + data.name).css('fill', 'red');
+				state_data[data.name].lead ='red';
+				nixonCount += parseInt(state_data[data.name].points);
+				kennedyCount -= parseInt(state_data[data.name].points);
+			}
+			
+			document.getElementById("BlueTotal").innerHTML = "" + kennedyCount;
+   			document.getElementById("RedTotal").innerHTML = "" + nixonCount;
+		  },
+		  showLabels: true,
+		  stateHoverStyles: {fill: 'white'},
+  		  stateSpecificStyles: state_data
+	  });
+	}
+	
 
-function onClick() {
-  $(document).ready(function() {
-      $('#map').usmap({});
-    });
-}
-
-    </script>
+   </script>
 </head>
-<body onload="onClick();">
+<body onload="initialize();">
+ <table style="padding-left: 100px; padding-right: 100px;" width="880px">
+            <tbody><tr>
+                <td align="center">
+                    <h3>
+                    Kennedy:&nbsp;
+                    <label id="BlueTotal">314</label>
+                    </h3>
+                </td>
+                <td align="center">
+                    <h3>
+                    Nixon:&nbsp;
+                    <label id="RedTotal">223</label>
+                    </h3>
+                </td>
+            </tr>
+        </tbody></table>
+        
   <form name="board" id="board">
-    <div id="map" style="width: 300px; height: 300px;"></div>
+    <div id="map" style="width: 800px; height: 600px;"></div>
   </form>
 </body>
 </html>
