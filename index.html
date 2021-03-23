@@ -9,7 +9,7 @@
   
   <script language="javascript">
   	
-  	var state_data = {
+	var state_data = {
 	    WA: {fill: 'red', points: '9'},
 	    OR: {fill: 'red', points: '6'},
 	    CA: {fill: 'red', points: '32'},
@@ -28,7 +28,7 @@
 	    NE: {fill: 'red', points: '6'},
 	    KS: {fill: 'red', points: '8'},
 	    OK: {fill: 'red', points: '8'},
- 	    TX: {fill: 'blue', points: '24'},
+	    TX: {fill: 'blue', points: '24'},
 	    AR: {fill: 'blue', points: '8'},
 	    LA: {fill: 'blue', points: '10'},
 	    MS: {fill: 'blue', points: '8'},
@@ -61,7 +61,7 @@
 	    NH: {fill: 'red', points: '4'},
 	    RI: {fill: 'blue', points: '4'},
 	    DC: {fill: 'blue', points: '0'}
-	  };
+	};
 	  
     let kennedyCount = 0;
     let nixonCount = 0;
@@ -82,7 +82,7 @@
 			//console.log(kennedyCount);
 		}
 		
-	 var map = $('#map').usmap({
+	    var map = $('#map').usmap({
 		  click: function(event, data) {
 		  	//console.log(data.name, state_data[data.name].points);
 		  	
@@ -97,14 +97,15 @@
 				nixonCount += parseInt(state_data[data.name].points);
 				kennedyCount -= parseInt(state_data[data.name].points);
 			}
-			
+			// update the scores
 			document.getElementById("BlueTotal").innerHTML = "" + kennedyCount;
-   			document.getElementById("RedTotal").innerHTML = "" + nixonCount;
+   			document.getElementById("RedTotal").innerHTML = "" + nixonCount;		
 		  },
 		  showLabels: true,
 		  stateHoverStyles: {fill: 'white'},
   		  stateSpecificStyles: state_data
-	  });
+	  	});
+	  	
 	}
 	
 
