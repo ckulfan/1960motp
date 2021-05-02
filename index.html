@@ -67,6 +67,8 @@
     let nixonCount = 0;
     
 	function initialize() {
+		
+		// reset counts just to be sure
 		kennedyCount = 0;
 		nixonCount = 0;
 		
@@ -84,24 +86,13 @@
 		
 	    var map = $('#map').usmap({
 		  click: function(event, data) {
-		  	//console.log(data.name, state_data[data.name].points);
-		  	
-	  		if(state_data[data.name].lead == 'red') {
-				$('#' + data.name).css('fill', 'blue');
-				state_data[data.name].lead ='blue';
-				nixonCount -= parseInt(state_data[data.name].points);
-				kennedyCount += parseInt(state_data[data.name].points);
-			} else {			    
-				$('#' + data.name).css('fill', 'red');
-				state_data[data.name].lead ='red';
-				nixonCount += parseInt(state_data[data.name].points);
-				kennedyCount -= parseInt(state_data[data.name].points);
-			}
-			// update the scores
-			document.getElementById("BlueTotal").innerHTML = "" + kennedyCount;
-   			document.getElementById("RedTotal").innerHTML = "" + nixonCount;		
+		  	doClick(event, data);
+		  },
+		  mouseover: function(event, data) {
+		  	doMouseOver(event, data);
 		  },
 		  showLabels: true,
+		  showRegions: true,
 		  stateHoverStyles: {fill: 'white'},
 		  stateSpecificStyles: state_data,
 		  labelWidth: 24,
@@ -113,10 +104,36 @@
   		  	'stroke-size': 1,
   		  	'font-size': '14px'
   		  }	
-	  	});
-	  	
+	  	});	
 	}
 	
+	var priorState = '';
+	
+	function doMouseOver(event, data) {
+		if (data.name != priorState) {
+			console.log('over: ' + data.name);
+			priorState = data.name;
+		}
+	}
+	
+	function doClick(event, data) {
+	  	//console.log(data.name, state_data[data.name].points);
+	  	// toggle the state's color and adjust the vote counts
+		if(state_data[data.name].lead == 'red') {
+			$('#' + data.name).css('fill', 'blue');
+			state_data[data.name].lead ='blue';
+			nixonCount -= parseInt(state_data[data.name].points);
+			kennedyCount += parseInt(state_data[data.name].points);
+		} else {			    
+			$('#' + data.name).css('fill', 'red');
+			state_data[data.name].lead ='red';
+			nixonCount += parseInt(state_data[data.name].points);
+			kennedyCount -= parseInt(state_data[data.name].points);
+		}
+		// update the scores
+		document.getElementById("BlueTotal").innerHTML = "" + kennedyCount;
+		document.getElementById("RedTotal").innerHTML = "" + nixonCount;		
+	}
 
    </script>
 </head>
@@ -136,8 +153,8 @@
                     </h3>
                 </td>
             </tr>
-        </tbody></table>
-        
+        </tbody>
+  </table>      
   <form name="board" id="board">
     <div id="map" style="width: 800px; height: 600px;"></div>
   </form>
