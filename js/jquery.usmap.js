@@ -459,10 +459,10 @@
     	
     	// stroke colors for each region
     	var strokes = {
-    		West: "#feedb4",
-    		Midwest: "#748A6C",
-    		South: "#9EDCE5",
-    		East: "#c74012",
+    		West: "#fff",
+    		Midwest: "#fff",
+    		South: "#fff",
+    		East: "#fff",
 		};
 		
 		var stroke_widths = {
