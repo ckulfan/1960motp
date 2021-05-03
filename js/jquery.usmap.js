@@ -466,8 +466,8 @@
 		};
 		
 		var stroke_widths = {
-	    	West: 3,
-    		Midwest: 3,
+	    	West: 2,
+    		Midwest: 2,
     		South: 2,
     		East: 2,
 		};
