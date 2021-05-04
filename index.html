@@ -2,7 +2,7 @@
 <!-- saved from url=(0042)file:///C:/Users/craig/Downloads/1960.html -->
 <html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
   <title>1960: The Making of the President</title>
-  
+ 
   <script src="js/jquery-3.6.0.js"></script>
   <script src="js/raphael.js"></script>
   <script src="js/jquery.usmap.js"></script>
@@ -62,6 +62,8 @@
 	    RI: {fill: 'blue', points: '4'},
 	    DC: {fill: 'blue', points: '0'}
 	};
+	
+	var stateKey = 'mofp_state_data';
 	  
     let kennedyCount = 0;
     let nixonCount = 0;
@@ -72,16 +74,28 @@
 		kennedyCount = 0;
 		nixonCount = 0;
 		
+		// see if there is data in the session cache
+		if (sessionStorage) {
+			var obj = JSON.parse(sessionStorage.getItem(stateKey)); 
+			if ( obj != null ) {
+				state_data = obj;
+			}
+		}
+			
 		// initialize the current leader based on color
 		for (const st in state_data) {
-			state_data[st].lead = state_data[st].fill;
-			if (state_data[st].fill == 'red') {
+			// see if the lead data exists (from storage) and use that, else default to fill color
+			if (state_data[st].lead == null) {
+				state_data[st].lead = state_data[st].fill;
+			}
+						
+			if (state_data[st].lead == 'red') {
 				nixonCount += parseInt(state_data[st].points);
+				state_data[st].fill = 'red';
 			} else {
 				kennedyCount += parseInt(state_data[st].points);
+				state_data[st].fill = 'blue';
 			}
-			//console.log(nixonCount);
-			//console.log(kennedyCount);
 		}
 		
 	    var map = $('#map').usmap({
@@ -105,6 +119,10 @@
   		  	'font-size': '14px'
   		  }	
 	  	});	
+	  	
+	  	// update the scores
+		document.getElementById("BlueTotal").innerHTML = "" + kennedyCount;
+		document.getElementById("RedTotal").innerHTML = "" + nixonCount;	
 	}
 	
 	var priorState = '';
@@ -132,7 +150,18 @@
 		}
 		// update the scores
 		document.getElementById("BlueTotal").innerHTML = "" + kennedyCount;
-		document.getElementById("RedTotal").innerHTML = "" + nixonCount;		
+		document.getElementById("RedTotal").innerHTML = "" + nixonCount;	
+		
+		// store the state data in the session 
+		sessionStorage.setItem(stateKey, JSON.stringify(state_data));	
+	}
+	
+	function resetScores() {
+		if (sessionStorage) {
+			sessionStorage.removeItem(stateKey);
+		}
+		window.document.location.reload(true);
+		return false;
 	}
 
    </script>
@@ -143,13 +172,13 @@
                 <td align="center">
                     <h3>
                     Kennedy:&nbsp;
-                    <label id="BlueTotal">314</label>
+                    <label id="BlueTotal">0</label>
                     </h3>
                 </td>
                 <td align="center">
                     <h3>
                     Nixon:&nbsp;
-                    <label id="RedTotal">223</label>
+                    <label id="RedTotal">0</label>
                     </h3>
                 </td>
             </tr>
@@ -158,5 +187,14 @@
   <form name="board" id="board">
     <div id="map" style="width: 800px; height: 600px;"></div>
   </form>
+ <table style="padding-left: 100px; padding-right: 100px;" width="880px">
+            <tbody><tr>
+                <td align="center">
+					<button onClick="resetScores();">Reset Scores</button>
+                </td>
+            </tr>
+        </tbody>
+  </table>      
+
 </body>
 </html>
